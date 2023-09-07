@@ -153,31 +153,48 @@ async function getLeetCodeProblemTitle(titleSlug) {
   }
 }
 
-module.exports = {
-  async getLeetCodeProblem() {
-    try {
-      const getTotal = await getLeetCodeProblemListCount();
-      if (getTotal) {
-        const totalCount = getTotal - 1;
-        const getRandomQuestionIndex = Math.floor(Math.random() * totalCount);
-        const getProblem = await getLeetCodeProblemList(getRandomQuestionIndex);
-        const titleSlug = getProblem.questions[0].titleSlug;
+async function getLeetCodeProblem() {
+  try {
+    const getTotal = await getLeetCodeProblemListCount();
+    if (getTotal) {
+      const totalCount = getTotal - 1;
+      const randomQuestionIndex = Math.floor(Math.random() * totalCount);
+      const problem = await getLeetCodeProblemList(randomQuestionIndex);
 
-        const response = await Promise.all([
-          getLeetCodeProblemContent(titleSlug),
-          getLeetCodeProblemHints(titleSlug),
-          getLeetCodeProblemTitle(titleSlug),
-        ]).then((res) => {
-          return res;
-        });
+      if (problem) {
+        // question difficulty is not medium - call function again
+        if (problem.questions[0].difficulty !== "Medium") {
+          return getLeetCodeProblem();
+        }
 
-        if (response) {
-          return response;
+        const titleSlug = "container-with-most-water"; //problem.questions[0].titleSlug;
+        const content = await getLeetCodeProblemContent(titleSlug);
+
+        if (content) {
+          // content length is grater than 2000 char - call function again
+          if (!content.question && content.question.content.length > 2000) {
+            return getLeetCodeProblem();
+          }
+
+          const hints = await getLeetCodeProblemHints(titleSlug);
+          const title = await getLeetCodeProblemTitle(titleSlug);
+
+          return {
+            content,
+            hints,
+            title,
+          };
         }
       }
-    } catch (error) {
-      console.log(error);
-      return null;
     }
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+module.exports = {
+  async getLeetCodeProblem() {
+    return await getLeetCodeProblem();
   },
 };

@@ -19,6 +19,10 @@ STEP 2 get problem data
   2. get title information with GET Title 
   3. get hints with GET hints
 
+STEP 3 check question data
+  1. question length > 2000 -> regenerate
+  2. hard and easy problems -> regenerate
+  3. store all questions id's
 
 
 -------  PROBLEM ------
