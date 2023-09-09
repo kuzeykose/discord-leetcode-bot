@@ -2,6 +2,9 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 const { token } = require("./config.json");
+const { getLeetCodeProblem } = require("./helpers/leetcode");
+const TurndownService = require("turndown");
+const cron = require("node-cron");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -56,8 +59,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-client.once(Events.ClientReady, (c) => {
+client.once(Events.ClientReady, async (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
+  cron.schedule("* * * * *", async () => {
+    const leetCodeProblem = await getLeetCodeProblem();
+    const turndownService = new TurndownService();
+    const markdown = turndownService.turndown(
+      leetCodeProblem.content.question.content
+    );
+
+    const channel = client.channels.cache.get("1150098399073419297");
+    channel.send(
+      `https://leetcode.com/problems/${leetCodeProblem.title.question.titleSlug}/` +
+        markdown
+    );
+  });
 });
 
 client.login(token);

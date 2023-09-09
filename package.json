@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.13.0",
+    "node-cron": "^3.0.2",
     "turndown": "^7.1.2"
   },
   "devDependencies": {

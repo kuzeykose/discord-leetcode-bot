@@ -7,6 +7,7 @@ module.exports = {
     .setName("ping")
     .setDescription("Replies with Pong!"),
   async execute(interaction) {
+    await interaction.deferReply();
     const leetCodeProblem = await getLeetCodeProblem();
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(
@@ -14,9 +15,9 @@ module.exports = {
     );
 
     if (leetCodeProblem) {
-      await interaction.reply(markdown);
+      await interaction.editReply(markdown);
     } else {
-      await interaction.reply("Error, can't find problem");
+      await interaction.editReply("Error, can't find problem");
     }
   },
 };

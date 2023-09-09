@@ -163,7 +163,10 @@ async function getLeetCodeProblem() {
 
       if (problem) {
         // question difficulty is not medium - call function again
-        if (problem.questions[0].difficulty !== "Medium") {
+        if (
+          problem.questions[0].difficulty !== "Medium" ||
+          problem.questions[0].paidOnly
+        ) {
           return getLeetCodeProblem();
         }
 
@@ -172,7 +175,7 @@ async function getLeetCodeProblem() {
 
         if (content) {
           // content length is grater than 2000 char - call function again
-          if (!content.question && content.question.content.length > 2000) {
+          if (content.question.content.length > 2000) {
             return getLeetCodeProblem();
           }
 
