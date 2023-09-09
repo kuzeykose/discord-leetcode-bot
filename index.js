@@ -1,11 +1,10 @@
 const fs = require("node:fs");
 const path = require("node:path");
+require("dotenv").config();
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
 const { getLeetCodeProblem } = require("./helpers/leetcode");
 const TurndownService = require("turndown");
 const cron = require("node-cron");
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -70,10 +69,10 @@ client.once(Events.ClientReady, async (c) => {
 
     const channel = client.channels.cache.get("1150098399073419297");
     channel.send(
-      `https://leetcode.com/problems/${leetCodeProblem.title.question.titleSlug}/` +
+      `https://leetcode.com/problems/${leetCodeProblem.title.question.titleSlug}/ \n` +
         markdown
     );
   });
 });
 
-client.login(token);
+client.login(process.env.DISCORD_TOKEN);

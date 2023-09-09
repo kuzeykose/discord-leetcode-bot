@@ -1,10 +1,8 @@
 --- CONFIG -----
-you have to create your own config.json
-{
-"token": TOKEN,
-"clientId": CLIENT_ID,
-"guildId": GUILD_ID
-}
+you have to create your own .env
+DISCORD_TOKEN='DISCORD_TOKEN'
+CLIENT_ID="CLIENT_ID"
+GUILD_ID="GUILD_ID"
 
 ------- RESOURCE ------
 
