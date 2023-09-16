@@ -59,8 +59,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.once(Events.ClientReady, async (c) => {
-  console.log(`Ready! Logged in as ${c.user.tag}`);
-  cron.schedule("* * * * *", async () => {
+  cron.schedule("0 0 * * 1", async () => {
     const leetCodeProblem = await getLeetCodeProblem();
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(

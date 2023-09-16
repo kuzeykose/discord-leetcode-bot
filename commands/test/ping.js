@@ -15,7 +15,10 @@ module.exports = {
     );
 
     if (leetCodeProblem) {
-      await interaction.editReply(markdown);
+      await interaction.editReply(
+        `https://leetcode.com/problems/${leetCodeProblem.title.question.titleSlug}/ \n` +
+          markdown
+      );
     } else {
       await interaction.editReply("Error, can't find problem");
     }
