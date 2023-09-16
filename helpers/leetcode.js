@@ -154,10 +154,18 @@ async function getLeetCodeProblemTitle(titleSlug) {
 }
 
 async function getLeetCodeProblem() {
+  const total = await getLeetCodeProblemListCount();
+  if (total) {
+    return await getLeetCodeProblemHelper(total);
+  } else {
+    return null;
+  }
+}
+
+async function getLeetCodeProblemHelper(total) {
   try {
-    const getTotal = await getLeetCodeProblemListCount();
-    if (getTotal) {
-      const totalCount = getTotal - 1;
+    if (total) {
+      const totalCount = total - 1;
       const randomQuestionIndex = Math.floor(Math.random() * totalCount);
       const problem = await getLeetCodeProblemList(randomQuestionIndex);
 
@@ -167,7 +175,7 @@ async function getLeetCodeProblem() {
           problem.questions[0].difficulty !== "Medium" ||
           problem.questions[0].paidOnly
         ) {
-          return getLeetCodeProblem();
+          return getLeetCodeProblemHelper(total);
         }
 
         const titleSlug = problem.questions[0].titleSlug;
@@ -176,7 +184,7 @@ async function getLeetCodeProblem() {
         if (content) {
           // content length is grater than 2000 char - call function again
           if (content.question.content.length > 2000) {
-            return getLeetCodeProblem();
+            return getLeetCodeProblemHelper(total);
           }
 
           const hints = await getLeetCodeProblemHints(titleSlug);
