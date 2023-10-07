@@ -109,5 +109,5 @@ You have to create your own .env
 
 ### Backlog
 
--[] Store asked question for disabling reasking.
--[] Translate question with AI model different languages.
+- [ ] Store asked question for disabling reasking.
+- [ ] Translate question with AI model different languages.
