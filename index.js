@@ -61,8 +61,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
 client.once(Events.ClientReady, async (c) => {
   console.log("Client ready!");
 
-  // Get leet code problem every 02:00 on Monday. -> 0 2 * * 1
-  cron.schedule("0 2 * * 1", async () => {
+  // Get leet code problem every 02:00 on Monday. -> 0 2 * * 0
+  cron.schedule("0 2 * * 0", async () => {
     const leetCodeProblem = await getLeetCodeProblem();
     const content = htmlToMarkdown(leetCodeProblem.content.question.content);
 
