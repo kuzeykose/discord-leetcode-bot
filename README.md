@@ -1,39 +1,46 @@
---- CONFIG -----
-you have to create your own .env
-DISCORD_TOKEN='DISCORD_TOKEN'
-CLIENT_ID="CLIENT_ID"
-GUILD_ID="GUILD_ID"
+# What is this?
 
-------- RESOURCE ------
+This discord bot is generating a leet code question every Sunday at 02:00AM.
 
-https://dev.to/en3sis/advanced-discord-js-custom-embeds-using-attachments-2bpn
+## How it works?
 
-------- FLOW -----
+##### Step 1) Get random question
 
-Total = 2842
-Random -> 0 , (total - 1) -> 55
-skip 2 , limit: 1
+1. Get problem set for getting total question count
+2. Generate randomNumber between 0 to total question number - 1
+3. Get question with skipping to randomNumber and limit 1.
 
-STEP 1 get random question
+##### Step 2) Get problem data
 
-1. get problem set for getting total question count
-2. create randomNumber between 0 to total question - 1
-3. get question with skip=(randomNumber) and limit=1
+1. Get problem content with GET Content
+2. Get title information with GET Title
+3. Get hints with GET hints
 
-STEP 2 get problem data
+(You can reach all these methods in section "Methods")
 
-1. get problem content with GET Content
-2. get title information with GET Title
-3. get hints with GET hints
+##### Step 3) Check question data
 
-STEP 3 check question data
+In step 3, we need to confirm that the question must be under 2000 characters and problem difficulty should be medium. If the generated question difficulty is hard or easy and character length is over than 2000 then regenarate the question.
 
-1. question length > 2000 -> regenerate
-2. hard and easy problems -> regenerate
-3. store all questions id's
+1. Check if question length grater than 2000 -> regenerate
+2. Check if problem difficulty is hard or easy -> regenerate
 
-------- PROBLEM ------
+## Environment
 
+You have to create your own .env
+
+```
+  DISCORD_TOKEN='DISCORD_TOKEN'
+  CLIENT_ID="CLIENT_ID"
+  GUILD_ID="GUILD_ID"
+  CHANNEL_ID="CHANNEL_ID"
+```
+
+### Problems
+
+1. Getting Content
+
+```
 - GET Content
   curl -X POST https://leetcode.com/graphql \
    -H "Content-Type: application/json" \
@@ -44,7 +51,11 @@ STEP 3 check question data
   "titleSlug": "container-with-most-water"
   }
   }'
+```
 
+2. Getting Hint
+
+```
 - GET hints
   curl -X POST https://leetcode.com/graphql \
    -H "Content-Type: application/json" \
@@ -54,7 +65,11 @@ STEP 3 check question data
   "titleSlug": "merge-intervals"
   }
   }'
+```
 
+3. Getting Title
+
+```
 - GET Title
   curl -X POST https://leetcode.com/graphql \
    -H "Content-Type: application/json" \
@@ -65,9 +80,13 @@ STEP 3 check question data
   "titleSlug": "merge-intervals"
   }
   }'
+```
 
-------- PROBLEM LIST --------
+### Problem List
 
+1. Getting Problem set
+
+```
 - GET problem set
   curl -X POST https://leetcode.com/graphql \
    -H "Content-Type: application/json" \
@@ -81,7 +100,14 @@ STEP 3 check question data
   },
   "operationName": "problemsetQuestionList"
   }'
+```
 
-  -------- BACKLOG --------
+### Resources
 
-  - Soruyu AI model ile translate et (maybe)
+[Discord.js](https://discord.js.org).
+[Discord.js Guide](https://discordjs.guide).
+
+### Backlog
+
+[] Store asked question for disabling reasking.
+[] Translate question with AI model different languages.
