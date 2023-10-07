@@ -3,8 +3,8 @@ const path = require("node:path");
 require("dotenv").config();
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 const { getLeetCodeProblem } = require("./helpers/leetcode");
-const TurndownService = require("turndown");
 const cron = require("node-cron");
+const { linkButtonCreator, htmlToMarkdown } = require("./helpers/message");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -59,18 +59,19 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.once(Events.ClientReady, async (c) => {
-  cron.schedule("0 0 * * 1", async () => {
+  console.log("Client ready!");
+
+  // Get leet code problem every 02:00 on Monday. -> 0 2 * * 1
+  cron.schedule("0 2 * * 1", async () => {
     const leetCodeProblem = await getLeetCodeProblem();
-    const turndownService = new TurndownService();
-    const markdown = turndownService.turndown(
-      leetCodeProblem.content.question.content
+    const content = htmlToMarkdown(leetCodeProblem.content.question.content);
+
+    const buttonRow = linkButtonCreator(
+      leetCodeProblem.title.question.titleSlug
     );
 
-    const channel = client.channels.cache.get("1150098399073419297");
-    channel.send(
-      `https://leetcode.com/problems/${leetCodeProblem.title.question.titleSlug}/ \n` +
-        markdown
-    );
+    const channel = client.channels.cache.get(process.env.CHANNEL_ID);
+    channel.send({ content, components: [buttonRow] });
   });
 });
 
